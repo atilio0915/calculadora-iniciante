@@ -8,7 +8,26 @@ export default function App() {
     if (display == "0") {
       return setDisplay(item);
     }
-    setDisplay(display + item);
+
+    let string = display + item;
+    let stringdividida = string.match(/\d+|[\+\-\*\/]/g);
+
+    if (stringdividida) {
+      let newdisplay = stringdividida
+        .map((element) => {
+          if (!isNaN(Number(element))) {
+            return element; //Number(element).toLocaleString("pt-BR");
+          }
+          return element;
+        })
+        .join("");
+      //setDisplay(newdisplay);
+      setDisplay(
+        newdisplay.replace(/\d+/g, (string) =>
+          Number(string).toLocaleString("pt-BR")
+        )
+      );
+    }
   }
 
   //display conter 3 e adicionar mais 1  digitos adicione um ponto
@@ -49,8 +68,10 @@ export default function App() {
 
   function result() {
     try {
-      let number = eval(display).toFixed(2);
-      setDisplay(number.toString());
+      let stringsempontos = display.replace(/\./g, "");
+      setDisplay(eval(stringsempontos).toLocaleString("pt-BR"));
+      //let number = eval(display).toFixed(3);
+      //setDisplay(number.toString());
     } catch (error) {
       alert("voce digitou errado");
     }
@@ -58,7 +79,7 @@ export default function App() {
 
   return (
     <div>
-      <div>{display}</div>
+      <div className="display">{display}</div>
       {["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"].map(
         (element, index) => (
           <button key={index} onClick={() => number(element)}>
