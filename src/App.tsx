@@ -4,12 +4,16 @@ import "./styles.css";
 export default function App() {
   const [display, setDisplay] = useState("0");
 
-  function number(item) {
+  function number(item: string) {
     if (display == "0") {
       return setDisplay(item);
     }
     setDisplay(display + item);
   }
+
+  //display conter 3 e adicionar mais 1  digitos adicione um ponto
+  //porem tenho q adicionar ponto sempre q tiver 3 digitos depois do ponto
+  //tamanho do display dividido por 3 com resto 0 adicione um ponto
   // limpar display
   function clean() {
     setDisplay("0");
@@ -21,22 +25,32 @@ export default function App() {
     setDisplay(display.slice(0, -1));
   }
 
-  function operation(item) {
+  function operation(item: string) {
     setDisplay((prevDisplay) => {
       const operation = ["+", "-", "*", "/", "."];
-      const last = prevDisplay[prevDisplay.length - 1];
+      const lastchar = prevDisplay[prevDisplay.length - 1];
 
-      if (operation.includes(last)) {
+      if (item === ".") {
+        let array = prevDisplay.split(/[\+\-\*\/]/);
+        let ultimoelemento = array[array.length - 1];
+
+        if (ultimoelemento.includes(".")) {
+          return prevDisplay;
+        }
+      }
+
+      if (operation.includes(lastchar)) {
         return prevDisplay;
       } else {
-        return display + item;
+        return prevDisplay + item;
       }
     });
   }
 
   function result() {
     try {
-      setDisplay(eval(display));
+      let number = eval(display).toFixed(2);
+      setDisplay(number.toString());
     } catch (error) {
       alert("voce digitou errado");
     }
